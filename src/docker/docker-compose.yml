@@ -1,0 +1,55 @@
+version: '3.7'
+
+services:
+  postgress:
+    image: postgres
+    container_name: postgress_container
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - postgress:/data/postgres
+    networks:
+      - webapi_network
+    restart: unless-stopped  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    ports:
+      - "8090:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: yoosef.m.1374@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    networks:
+      - webapi_network
+    restart: unless-stopped
+    depends_on:
+      - postgress
+
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    volumes:
+      - ./redis/redis.conf:/etc/redis/redis.conf
+      - redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - webapi_network
+volumes:
+  postgress:
+  pgadmin:
+  redis:
+  logs:
+networks:
+  webapi_network:
+    driver: bridge
+
+    
