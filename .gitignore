@@ -11,6 +11,6 @@
  *.log
  
 
-go.work
+src/go.work
 
 *.log
