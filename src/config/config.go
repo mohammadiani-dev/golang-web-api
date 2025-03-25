@@ -4,7 +4,8 @@ import (
 	"errors"
 	"log"
 	"os"
-	
+	"time"
+
 	"github.com/spf13/viper"
 )
 
@@ -13,13 +14,49 @@ type Server struct {
 	RunMode string
 }
 
-type Config struct {
-	Server Server
+type Logger struct {
+	FilePath string
+	Encoding string
+	Level    string
+	Logger   string
 }
+
+type Redis struct {
+	Host               string
+	Port               string
+	Password           string
+	DB                 int
+	PoolSize           int
+	PoolTimeout        time.Duration
+	IdleTimeout        time.Duration
+	ReadTimeout        time.Duration
+	WriteTimeout       time.Duration
+	IdleCheckFrequency time.Duration
+}
+
+type Postgres struct {
+	Host            string
+	Port            string
+	User            string
+	Password        string
+	DBName          string
+	SSLMode         string
+	MaxIdleConns    int
+	MaxOpenConns    int
+	ConnMaxLifetime time.Duration
+}
+type Config struct {
+	Server   Server
+	Redis    Redis
+	Postgres Postgres
+	Logger   Logger
+}
+
 
 func NewConfig() *Config {
 	return &Config{}
 }
+
 
 func GetConfig() *Config {
 	configPath := getConfigPath(os.Getenv("APP_ENV"))
@@ -35,7 +72,6 @@ func GetConfig() *Config {
 
 	return config
 }
-
 
 func parseConfig(v *viper.Viper) (*Config, error) {
 	var config Config
@@ -66,14 +102,13 @@ func loadConfig(filename string, filetype string) (*viper.Viper, error) {
 	return v, nil
 }
 
-
 func getConfigPath(env string) string {
 	if env == "production" {
-		return "./config/config-production.yml"
+		return "../config/config-production.yml"
 	} else if env == "docker" {
-		return "./config/config-docker.yml"
+		return "../config/config-docker.yml"
 	} else {
-		return "./config/config-development.yml"
+		return "../config/config-development.yml"
 	}
 
 }

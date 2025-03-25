@@ -1,3 +1,32 @@
 Server:
   Port: 5005
   RunMode: debug
+Redis:
+  Host: localhost
+  Port: 6379
+  Password: 
+  DB: 0
+  IdleTimeout: 5
+  ReadTimeout: 5
+  WriteTimeout: 5
+  PoolSize: 10
+  PoolTimeout: 15
+  IdleCheckFrequency: 500
+postgres:
+  host: localhost
+  port: 5432
+  user: postgres
+  password: postgres
+  dbname: postgres
+  sslmode: disable
+  maxIdleConns: 15
+  maxOpenConns: 100
+  connMaxLifetime: 5
+
+Logger:
+  filePath : '../logs/logs.log'
+  encoding : json
+  level : debug
+  logger : zerolog
+
+  

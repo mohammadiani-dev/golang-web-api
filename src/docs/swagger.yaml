@@ -1,0 +1,73 @@
+definitions:
+  helper.BaseHttpResponse:
+    properties:
+      error: {}
+      result: {}
+      resultCode:
+        type: integer
+      success:
+        type: boolean
+      validationErrors:
+        items:
+          $ref: '#/definitions/validations.ValidationError'
+        type: array
+    type: object
+  validations.ValidationError:
+    properties:
+      message:
+        type: string
+      property:
+        type: string
+      tag:
+        type: string
+      value:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/health:
+    get:
+      consumes:
+      - application/json
+      description: Check if the server is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+      summary: Health Check
+  /v1/health/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get data by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helper.BaseHttpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - AuthBearer: []
+      summary: Get Data By Id
+securityDefinitions:
+  AuthBearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
